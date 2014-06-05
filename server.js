@@ -63,7 +63,15 @@ io.sockets.on('connection',
 			socket.broadcast.emit('mouse', data);
 		});
 		
-		
+		// When this user emits, client side: socket.emit('otherevent',some data);
+		socket.on('peer_id', function(data) {
+			// Data comes in as whatever was sent, including objects
+			console.log("Received: 'peer_id' " + data);
+			
+			// Send it to all of the clients
+			socket.broadcast.emit('peer_id', data);
+		});
+				
 		socket.on('disconnect', function() {
 			console.log("Client has disconnected " + socket.id);
 		});

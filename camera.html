@@ -1,33 +1,23 @@
 <html>
 	<head>
-		<script src="http://cdn.peerjs.com/0.3/peer.min.js">/script>		
+		<script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>		
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript">
 		
 			var socket = null;
 			// Connect after we have user media and peer connection
-			//io.connect('http://128.122.151.187:8080/');
+			//io.connect('http://localhost:8080/');
 			
-			socket.on('connect', function() {
-				console.log("Connected");
-			});
-			
-			socket.on('peer_id', function(data) {
-				console.log("Got a peer: " + data);
-				
-				// Call them
-			});
+			// We'll use a global variable to hold on to our id from PeerJS
+			var peer_id = null;
 
-			///////////////
+			// Register for an API Key:	http://peerjs.com/peerserver
+			var peer = null; // new Peer({key: 'YOU API KEY'});			
 			
-			document.addEventListener("DOMContentLoaded", initcamera, false);
-			
-			/////////////
-
 			/* Get User Media */
 			var my_stream = null;
 
-			function initCamera() {
+			var initCamera = function() {
 				window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 				navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 				if (navigator.getUserMedia) {
@@ -38,6 +28,25 @@
 								videoElement.play();
 								
 								peer = new Peer({key: 'uohu08l7r6swcdi'});
+
+								// Get an ID from the PeerJS server		
+								peer.on('open', function(id) {
+								  console.log('My peer ID is: ' + id);
+								  peer_id = id;
+
+									// Connect to socket server
+									socket = io.connect('http://localhost:8080/');
+
+									socket.on('connect', function() {
+										console.log("Connected");
+									});
+			
+									socket.on('peer_id', function(data) {
+										console.log("Got a peer: " + data);
+				
+										var call = peer.call(data, my_stream);
+									});				
+								});								
 								
 							}, function(err) {
 								console.log('Failed to get local stream' ,err);
@@ -45,20 +54,7 @@
 				}			
 			}
 			
-			// We'll use a global variable to hold on to our id from PeerJS
-			var peer_id = null;
-
-			// Register for an API Key:	http://peerjs.com/peerserver
-			var peer = null; // new Peer({key: 'YOU API KEY'});
-
-			// Get an ID from the PeerJS server		
-			peer.on('open', function(id) {
-			  console.log('My peer ID is: ' + id);
-			  peer_id = id;
-
-				// Connect to socket server
-				socket = io.connect('http://128.122.151.187:8080/');
-			});
+			document.addEventListener("DOMContentLoaded", initCamera, false);
 				
 		</script>
 		<style>
@@ -76,7 +72,6 @@
 		</style>		
 	</head>
 	<body>
-		<canvas width="600" height="600" id="mycanvas" />
-		<video id="myvideo" width="320" height="240" id="myvideo"></video>
+		<video id="myvideo" width="320" height="240" muted></video>
 	</body>
 </html>
