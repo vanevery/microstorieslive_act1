@@ -1,0 +1,99 @@
+<html>
+	<head>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+		
+			var socket = io.connect('http://128.122.151.187:8080/');
+			
+			socket.on('connect', function() {
+				console.log("Connected");
+			});
+
+			// Receive mouse
+			socket.on('mouse', function (data) {
+				console.log(data.startX + " " + data.startY);
+				draw(data.startX, data.startY, data.endX, data.endY);
+			});
+			
+			var sendmouse = function(startX, startY, endX, endY) {
+				socket.emit('mouse',{ startX: startX, startY: startY, endX: endX, endY: endY });
+			};
+
+			///////////////
+			
+			var canvas;
+			var context;
+			var px = -1;
+			var py = -1;
+			var mousedown = false;
+
+			var initcanvas = function() {
+				canvas = document.getElementById('mycanvas');
+				context = canvas.getContext('2d');
+			
+				context.fillStyle="#000000";
+				context.fillRect(0,0,canvas.width,canvas.height);	
+				
+				canvas.addEventListener('mousedown', function(evt) {
+					
+					// Get the canvas bounding rect
+					var canvasRect = canvas.getBoundingClientRect(); 
+
+					// Now calculate the mouse position values
+					py = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
+					px = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
+											
+					mousedown = true;
+				});
+				
+				canvas.addEventListener('mouseup', function(evt) {
+					mousedown = false;
+				});
+				
+				canvas.addEventListener('mousemove', function(evt) {
+					
+					console.log("mousemove " + evt.clientX + " " + evt.clientY);
+
+					if (mousedown) {
+					
+						//evt.clientX is x but in the entire window, not the canvas
+						//evt.clientY is y
+		
+						// Get the canvas bounding rect
+						var canvasRect = canvas.getBoundingClientRect(); 
+
+						// Now calculate the mouse position values
+						y = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
+						x = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
+				
+						console.log("mousemove x:" + x + " y:" + y);
+
+						sendmouse(px, py, x, y);
+						draw(px, py, x, y);
+						px = x;
+						py = y;
+					}
+				}, false);				
+			};
+	
+			var draw = function(startX, startY, endX, endY) {
+				context.beginPath();
+				context.strokeStyle='#FFFFFF';
+				context.moveTo(startX,startY);
+				context.lineTo(endX,endY);
+				context.stroke();			
+			};
+			
+			document.addEventListener("DOMContentLoaded", initcanvas, false);
+			
+		</script>
+		<style>
+			body {
+				background-color: #000000;
+			}
+		</style>	
+	</head>
+	<body>
+		<canvas width="600" height="600" id="mycanvas" />
+	</body>
+</html>
