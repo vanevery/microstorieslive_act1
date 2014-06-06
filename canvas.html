@@ -3,7 +3,7 @@
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript">
 		
-			var socket = io.connect('http://localhost:8080/');
+			var socket = io.connect('http://128.122.151.187:8080/');
 			
 			socket.on('connect', function() {
 				console.log("Connected");
@@ -52,7 +52,7 @@
 				
 				canvas.addEventListener('mousemove', function(evt) {
 					
-					console.log("mousemove " + evt.clientX + " " + evt.clientY);
+					//console.log("mousemove " + evt.clientX + " " + evt.clientY);
 
 					if (mousedown) {
 					
@@ -66,14 +66,16 @@
 						y = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
 						x = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
 				
-						console.log("mousemove x:" + x + " y:" + y);
+						//console.log("mousemove x:" + x + " y:" + y);
 
 						sendmouse(px, py, x, y);
 						draw(px, py, x, y);
 						px = x;
 						py = y;
 					}
-				}, false);				
+				}, false);		
+				
+				clearDrawing();		
 			};
 	
 			var draw = function(startX, startY, endX, endY) {
@@ -86,14 +88,27 @@
 			
 			document.addEventListener("DOMContentLoaded", initcanvas, false);
 			
+			
+			var clearDrawing = function() {
+				//alert("Clearing");
+				context.fillStyle="#000000";
+				context.fillRect(0,0,canvas.width,canvas.height);	
+				setTimeout(clearDrawing, 10000);
+			};
+			
 		</script>
 		<style>
 			body {
 				background-color: #000000;
 			}
+			
+			#mycanvas {
+				width: 100%;
+				height: auto;				
+			}
 		</style>	
 	</head>
 	<body>
-		<canvas width="600" height="600" id="mycanvas"></canvas>
+		<canvas width="320" height="240" id="mycanvas"></canvas>
 	</body>
 </html>
