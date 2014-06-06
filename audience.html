@@ -115,8 +115,17 @@
 					var videoElement = document.getElementById('myvideo');
 					videoElement.src = window.URL.createObjectURL(remoteStream) || remoteStream;
 					videoElement.play();
+					drawVideo(videoElement, context, videoElement.width, videoElement.height);
 				});
 			});
+			
+			/////
+	
+			function drawVideo(video, context, width, height) {
+				if (video.paused || video.ended) return;
+				context.drawImage(video, 0, 0, width, height);
+				setTimeout(drawVideo, 20, video, context, width, height);
+			}
 			
 		</script>
 		<style>
@@ -125,16 +134,18 @@
 			}
 			
 			#mycanvas {
-			
+				width: 100%;
+				height: auto;				
 			}
 			
 			#myvideo {
-			
+				width: 100%;
+				height: auto;
 			}
 		</style>		
 	</head>
 	<body>
-		<canvas width="600" height="600" id="mycanvas"></canvas>
+		<canvas width="320" height="240" id="mycanvas"></canvas>
 		<video id="myvideo" width="320" height="240" id="myvideo"></video>
 	</body>
 </html>
