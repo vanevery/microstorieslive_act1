@@ -115,18 +115,19 @@
 					var videoElement = document.getElementById('myvideo');
 					videoElement.src = window.URL.createObjectURL(remoteStream) || remoteStream;
 					videoElement.play();
-					drawVideo(videoElement, context, videoElement.width, videoElement.height);
+					//drawVideo(videoElement, context, videoElement.width, videoElement.height);
 				});
 			});
 			
 			/////
 	
+			/*
 			function drawVideo(video, context, width, height) {
 				if (video.paused || video.ended) return;
 				context.drawImage(video, 0, 0, width, height);
 				setTimeout(drawVideo, 20, video, context, width, height);
 			}
-			
+			*/
 		</script>
 		<style>
 			body {
@@ -137,10 +138,16 @@
 				visibility: hidden;
 			}
 			
+			#content {
+				width: 854px;
+				margin: 0, auto;
+			}
 		</style>		
 	</head>
 	<body>
-		<canvas width="320" height="240" id="mycanvas"></canvas>
-		<video id="myvideo" width="320" height="240" id="myvideo"></video>
+		<div id="content">
+			<canvas width="854" height="480" id="mycanvas"></canvas>
+			<video width="854" height="480" id="myvideo"></video>
+		</div>
 	</body>
 </html>
