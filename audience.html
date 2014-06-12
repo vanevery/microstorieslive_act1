@@ -150,40 +150,48 @@
 			#myvideo {
 				visibility: visible;
 			}
-						
+			
 			#video_div {
+				position: absolute;
+				top: 0px;
+				left: 0px;
 				width: 854px;
 				margin: 0, auto;
 				z-index: 0;
 			}
 
 			#canvas_div {
+				position: absolute;
+				top: 0px;
+				left: 0px;
 				width: 854px;
 				margin: 0, auto;
 				z-index: 1;
 			}
 			
 			#instructions {
+				position: absolute;
+				top: 500px;
 				width: 854px;
-				margin-right: auto;
-				margin-top: -480px;
+				margin: 0, auto;
 				color: #dddddd;
 				font-size: large;
 			}
 		</style>		
 	</head>
 	<body>
-		<div id="instructions">
-			This video is live.  Try drawing on the floor.
-		</div>
+		<div id="content_wrapper">
 			<div id="canvas_div">
 				<canvas width="854" height="480" id="mycanvas"></canvas>
 			</div>
 			<div id="video_div">
 				<video width="854" height="480" id="myvideo"></video>
 			</div>
-		<div id="more">
-			<a href="http://webchat.freenode.net/?channels=itpliv" target="_NEW">Chat with us</a><br />
+		<div id="instructions">
+			This video is live.  Try drawing on the floor.
+			<br />
+			<a href="http://webchat.freenode.net/?channels=itpliv" target="_NEW">Chat with us</a>
+			<br />
 			<a href="mailto:Shawn.Van.Every@nyu.edu">Email Feedback</a>
 		</div>
 	</body>
