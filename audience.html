@@ -142,18 +142,26 @@
 				visibility: visible;
 			}
 			
-			.content {
+			#video_div {
 				position: absolute;
 				width: 854px;
 				margin: 0, auto;
+				z-index: 0;
+			}
+
+			#canvas_div {
+				position: absolute;
+				width: 854px;
+				margin: 0, auto;
+				z-index: 1;
 			}
 		</style>		
 	</head>
 	<body>
-		<div class="content">
+		<div class="canvas_div">
 			<canvas width="854" height="480" id="mycanvas"></canvas>
 		</div>
-		<div class="content">
+		<div class="video_div">
 			<video width="854" height="480" id="myvideo"></video>
 		</div>
 	</body>
