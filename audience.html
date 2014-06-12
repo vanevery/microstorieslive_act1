@@ -20,7 +20,7 @@
 			});
 			
 			var sendmouse = function(startX, startY, endX, endY) {
-				socket.emit('mouse',{ startX: startX, startY: startY, endX: endX, endY: endY });
+				socket.emit('mouse',{ startX: startX, startY: startY, endX: endX, endY: endY, color: color });
 			};
 			
 			socket.on('clear', function (data) {
@@ -80,7 +80,7 @@
 				
 						//console.log("mousemove x:" + x + " y:" + y);
 
-						sendmouse(px, py, x, y, color);
+						sendmouse(px, py, x, y);
 						draw(px, py, x, y);
 						px = x;
 						py = y;
