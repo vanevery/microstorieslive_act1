@@ -98,7 +98,7 @@
 			};
 			
 			var clearDrawing = function() {
-				clearRect(0,0,canvas.width,canvas.height);
+				context.clearRect(0,0,canvas.width,canvas.height);
 			}
 			
 			document.addEventListener("DOMContentLoaded", initcanvas, false);
@@ -170,6 +170,7 @@
 			}
 			
 			#instructions {
+				top: 500px;
 				width: 854px;
 				margin: 0, auto;
 				color: #dddddd;
