@@ -56,7 +56,7 @@
 				
 				canvas.addEventListener('mousemove', function(evt) {
 					
-					console.log("mousemove " + evt.clientX + " " + evt.clientY);
+					//console.log("mousemove " + evt.clientX + " " + evt.clientY);
 
 					if (mousedown) {
 					
@@ -70,7 +70,7 @@
 						y = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
 						x = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
 				
-						console.log("mousemove x:" + x + " y:" + y);
+						//console.log("mousemove x:" + x + " y:" + y);
 
 						sendmouse(px, py, x, y);
 						draw(px, py, x, y);
@@ -135,7 +135,7 @@
 			}
 			
 			#myvideo {
-				visibility: hidden;
+				visibility: visible;
 			}
 			
 			#content {
