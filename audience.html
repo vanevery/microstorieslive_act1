@@ -22,6 +22,10 @@
 			var sendmouse = function(startX, startY, endX, endY) {
 				socket.emit('mouse',{ startX: startX, startY: startY, endX: endX, endY: endY });
 			};
+			
+			socket.on('clear', function (data) {
+				clearDrawing();
+			});
 
 			///////////////
 			
@@ -76,7 +80,7 @@
 				
 						//console.log("mousemove x:" + x + " y:" + y);
 
-						sendmouse(px, py, x, y);
+						sendmouse(px, py, x, y, color);
 						draw(px, py, x, y);
 						px = x;
 						py = y;
@@ -92,6 +96,10 @@
 				context.lineTo(endX,endY);
 				context.stroke();			
 			};
+			
+			var clearDrawing = function() {
+				clearRect(0,0,canvas.width,canvas.height);
+			}
 			
 			document.addEventListener("DOMContentLoaded", initcanvas, false);
 			
@@ -160,6 +168,13 @@
 				margin: 0, auto;
 				z-index: 1;
 			}
+			
+			#instructions {
+				width: 854px;
+				margin: 0, auto;
+				color: #dddddd;
+				font-size: large;
+			}
 		</style>		
 	</head>
 	<body>
@@ -168,6 +183,9 @@
 		</div>
 		<div id="video_div">
 			<video width="854" height="480" id="myvideo"></video>
+		</div>
+		<div id="instructions">
+			This video is live.  Try drawing on the floor.
 		</div>
 	</body>
 </html>

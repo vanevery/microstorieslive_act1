@@ -57,11 +57,16 @@ io.sockets.on('connection',
 		// When this user emits, client side: socket.emit('otherevent',some data);
 		socket.on('mouse', function(data) {
 			// Data comes in as whatever was sent, including objects
-			console.log("Received: 'mouse' " + data);
+			//console.log("Received: 'mouse' " + data);
 			
 			// Send it to all of the clients
 			socket.broadcast.emit('mouse', data);
 		});
+		
+		socket.on('clear', function(data) {			
+			socket.broadcast.emit('clear', data);
+		});
+				
 		
 		// When this user emits, client side: socket.emit('otherevent',some data);
 		socket.on('peer_id', function(data) {

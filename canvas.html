@@ -12,13 +12,9 @@
 			// Receive mouse
 			socket.on('mouse', function (data) {
 				console.log(data.startX + " " + data.startY);
-				draw(data.startX, data.startY, data.endX, data.endY);
+				draw(data.startX, data.startY, data.endX, data.endY, data.color);
 			});
 			
-			var sendmouse = function(startX, startY, endX, endY) {
-				socket.emit('mouse',{ startX: startX, startY: startY, endX: endX, endY: endY });
-			};
-
 			///////////////
 			
 			var canvas;
@@ -33,55 +29,16 @@
 			
 				context.fillStyle="#000000";
 				context.fillRect(0,0,canvas.width,canvas.height);	
-				
-				canvas.addEventListener('mousedown', function(evt) {
 					
-					// Get the canvas bounding rect
-					var canvasRect = canvas.getBoundingClientRect(); 
-
-					// Now calculate the mouse position values
-					py = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
-					px = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
-											
-					mousedown = true;
-				});
-				
-				canvas.addEventListener('mouseup', function(evt) {
-					mousedown = false;
-				});
-				
-				canvas.addEventListener('mousemove', function(evt) {
-					
-					//console.log("mousemove " + evt.clientX + " " + evt.clientY);
-
-					if (mousedown) {
-					
-						//evt.clientX is x but in the entire window, not the canvas
-						//evt.clientY is y
-		
-						// Get the canvas bounding rect
-						var canvasRect = canvas.getBoundingClientRect(); 
-
-						// Now calculate the mouse position values
-						y = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
-						x = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
-				
-						//console.log("mousemove x:" + x + " y:" + y);
-
-						sendmouse(px, py, x, y);
-						draw(px, py, x, y);
-						px = x;
-						py = y;
-					}
-				}, false);		
 				
 				clearDrawing();		
 			};
 	
-			var draw = function(startX, startY, endX, endY) {
+			var draw = function(startX, startY, endX, endY, color) {
 				context.beginPath();
-				context.strokeStyle='#FFFFFF';
+				context.strokeStyle=color;
 				context.moveTo(startX,startY);
+				context.lineWidth = 5;
 				context.lineTo(endX,endY);
 				context.stroke();			
 			};
@@ -91,9 +48,10 @@
 			
 			var clearDrawing = function() {
 				//alert("Clearing");
+				socket.emit('clear', {});
 				context.fillStyle="#000000";
 				context.fillRect(0,0,canvas.width,canvas.height);	
-				setTimeout(clearDrawing, 10000);
+				setTimeout(clearDrawing, 30000);
 			};
 			
 		</script>
