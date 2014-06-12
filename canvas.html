@@ -11,7 +11,7 @@
 
 			// Receive mouse
 			socket.on('mouse', function (data) {
-				console.log(data.startX + " " + data.startY);
+				console.log(data.color);
 				draw(data.startX, data.startY, data.endX, data.endY, data.color);
 			});
 			
@@ -26,11 +26,7 @@
 			var initcanvas = function() {
 				canvas = document.getElementById('mycanvas');
 				context = canvas.getContext('2d');
-			
-				context.fillStyle="#000000";
-				context.fillRect(0,0,canvas.width,canvas.height);	
-					
-				
+								
 				clearDrawing();		
 			};
 	
