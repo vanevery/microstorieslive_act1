@@ -30,12 +30,16 @@
 			var px = -1;
 			var py = -1;
 			var mousedown = false;
+			var color = "rgb("+
+			  Math.floor(Math.random()*128)+","+
+			  Math.floor(Math.random()*128)+","+
+			  Math.floor(Math.random()*128)+")";
 
 			var initcanvas = function() {
 				canvas = document.getElementById('mycanvas');
 				context = canvas.getContext('2d');
 			
-				context.fillStyle="#000000";
+				//context.fillStyle="#000000";
 				context.fillRect(0,0,canvas.width,canvas.height);	
 				
 				canvas.addEventListener('mousedown', function(evt) {
@@ -82,7 +86,7 @@
 	
 			var draw = function(startX, startY, endX, endY) {
 				context.beginPath();
-				context.strokeStyle='#FFFFFF';
+				context.strokeStyle=color;
 				context.moveTo(startX,startY);
 				context.lineTo(endX,endY);
 				context.stroke();			
@@ -138,15 +142,18 @@
 				visibility: visible;
 			}
 			
-			#content {
+			.content {
+				position: absolute;
 				width: 854px;
 				margin: 0, auto;
 			}
 		</style>		
 	</head>
 	<body>
-		<div id="content">
+		<div class="content">
 			<canvas width="854" height="480" id="mycanvas"></canvas>
+		</div>
+		<div class="content">
 			<video width="854" height="480" id="myvideo"></video>
 		</div>
 	</body>
