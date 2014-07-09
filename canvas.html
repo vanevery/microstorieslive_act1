@@ -10,9 +10,14 @@
 			});
 
 			// Receive mouse
-			socket.on('mouse', function (data) {
+			socket.on('mouse', function(data) {
 				console.log(data.color);
 				draw(data.startX, data.startY, data.endX, data.endY, data.color);
+			});
+
+			socket.on('text', function(data) {
+				console.log(data.text);
+				drawText(data.text, data.x, data.y);
 			});
 			
 			///////////////
@@ -41,13 +46,17 @@
 			
 			document.addEventListener("DOMContentLoaded", initcanvas, false);
 			
-			
 			var clearDrawing = function() {
 				//alert("Clearing");
 				socket.emit('clear', {});
 				context.fillStyle="#000000";
 				context.fillRect(0,0,canvas.width,canvas.height);	
 				setTimeout(clearDrawing, 30000);
+			};
+
+			var drawText = function(text, x, y) {
+				context.font="30px Verdana";
+				context.fillText(text,x,y);
 			};
 			
 		</script>

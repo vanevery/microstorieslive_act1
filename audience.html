@@ -22,6 +22,11 @@
 			var sendmouse = function(startX, startY, endX, endY) {
 				socket.emit('mouse',{ startX: startX, startY: startY, endX: endX, endY: endY, color: color });
 			};
+
+			var sendText = function() {
+				var text = document.getElementById('text').value;
+				socket.emit('text', {text: text, x: x, y: y});
+			};
 			
 			socket.on('clear', function (data) {
 				clearDrawing();
@@ -31,6 +36,8 @@
 			
 			var canvas;
 			var context;
+			var x = -1;
+			var y = -1;
 			var px = -1;
 			var py = -1;
 			var mousedown = false;
@@ -187,6 +194,11 @@
 			<div id="video_div">
 				<video width="854" height="480" id="myvideo"></video>
 			</div>
+			<div id="text_div">
+				<input type="text" name="text">
+				<input type="button" name="textbutton" value="Send" onClick="sendText()">
+			</div>
+		</div>
 		<div id="instructions">
 			This video is live.  Try drawing.
 			<br />

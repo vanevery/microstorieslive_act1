@@ -62,6 +62,10 @@ io.sockets.on('connection',
 			// Send it to all of the clients
 			socket.broadcast.emit('mouse', data);
 		});
+
+		socket.on('text', function(data) {
+			socket.broadcast.emit('text',data);
+		});
 		
 		socket.on('clear', function(data) {			
 			socket.broadcast.emit('clear', data);
