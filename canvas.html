@@ -3,7 +3,7 @@
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript">
 		
-			var socket = io.connect('http://128.122.151.187:8080/');
+			var socket = io.connect('http://localhost:8080/');
 			
 			socket.on('connect', function() {
 				console.log("Connected");
@@ -16,8 +16,8 @@
 			});
 
 			socket.on('text', function(data) {
-				console.log(data.text);
-				drawText(data.text, data.x, data.y);
+				console.log(data);
+				drawText(data.text, data.x, data.y, data.color);
 			});
 			
 			///////////////
@@ -54,8 +54,9 @@
 				setTimeout(clearDrawing, 30000);
 			};
 
-			var drawText = function(text, x, y) {
+			var drawText = function(text, x, y, color) {
 				context.font="30px Verdana";
+				context.fillStyle=color;
 				context.fillText(text,x,y);
 			};
 			

@@ -4,7 +4,7 @@
 		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript">
 		
-			var socket = io.connect('http://128.122.151.187:8080/');
+			var socket = io.connect('http://localhost:8080/');
 			
 			socket.on('connect', function() {
 				console.log("Connected");
@@ -23,9 +23,8 @@
 				socket.emit('mouse',{ startX: startX, startY: startY, endX: endX, endY: endY, color: color });
 			};
 
-			var sendText = function() {
-				var text = document.getElementById('text').value;
-				socket.emit('text', {text: text, x: x, y: y});
+			var sendText = function(textToSend, x, y) {
+				socket.emit('text', {text: textToSend, x: x, y: y, color: color});
 			};
 			
 			socket.on('clear', function (data) {
@@ -33,7 +32,8 @@
 			});
 
 			///////////////
-			
+			var mousecanvas;
+			var mousecontext;
 			var canvas;
 			var context;
 			var x = -1;
@@ -47,6 +47,9 @@
 			  Math.floor(Math.random()*128+127)+")";
 
 			var initcanvas = function() {
+				mousecanvas = document.getElementById('mymousecanvas');
+				mousecontext = mousecanvas.getContext('2d');
+			
 				canvas = document.getElementById('mycanvas');
 				context = canvas.getContext('2d');
 			
@@ -61,8 +64,14 @@
 					// Now calculate the mouse position values
 					py = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
 					px = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
-											
-					mousedown = true;
+
+					if (document.getElementById('text').value != "") {
+						sendText(document.getElementById('text').value, py, px);
+						document.getElementById('text').value = "";
+					} else {
+						mousedown = true;				
+					}
+
 				});
 				
 				canvas.addEventListener('mouseup', function(evt) {
@@ -70,21 +79,26 @@
 				});
 				
 				canvas.addEventListener('mousemove', function(evt) {
-					
+
+					//evt.clientX is x but in the entire window, not the canvas
+					//evt.clientY is y
+	
+					// Get the canvas bounding rect
+					var canvasRect = canvas.getBoundingClientRect(); 
+
+					// Now calculate the mouse position values
+					y = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
+					x = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
+								
 					//console.log("mousemove " + evt.clientX + " " + evt.clientY);
 
-					if (mousedown) {
-					
-						//evt.clientX is x but in the entire window, not the canvas
-						//evt.clientY is y
-		
-						// Get the canvas bounding rect
-						var canvasRect = canvas.getBoundingClientRect(); 
+					if (document.getElementById('text').value != "") {
+						drawText(document.getElementById('text').value, x, y, color);
+					}
 
-						// Now calculate the mouse position values
-						y = evt.clientY - canvasRect.top; // minus the starting point of the canvas rect
-						x = evt.clientX - canvasRect.left;  // minus the starting point of the canvas rect on the x axis
-				
+					if (mousedown) {
+								
+
 						//console.log("mousemove x:" + x + " y:" + y);
 
 						sendmouse(px, py, x, y);
@@ -95,6 +109,14 @@
 				}, false);				
 			};
 	
+			var drawText = function(text, x, y, color) {
+								mousecontext.clearRect(0,0,mousecanvas.width,mousecanvas.height);
+
+				mousecontext.font="30px Verdana";
+				mousecontext.fillStyle=color;
+				mousecontext.fillText(text,x,y);
+			};
+			
 			var draw = function(startX, startY, endX, endY) {
 				context.beginPath();
 				context.strokeStyle=color;
@@ -173,12 +195,30 @@
 				left: 0px;
 				width: 854px;
 				margin: 0, auto;
+				z-index: 2;
+			}
+			
+			#canvas_other_div {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 854px;
+				margin: 0, auto;
 				z-index: 1;
+			}
+						
+			#text_div {
+				position: absolute;
+				top: 500px;
+				width: 854px;
+				margin: 0, auto;
+				color: #dddddd;
+				font-size: large;
 			}
 			
 			#instructions {
 				position: absolute;
-				top: 500px;
+				top: 550px;
 				width: 854px;
 				margin: 0, auto;
 				color: #dddddd;
@@ -191,12 +231,14 @@
 			<div id="canvas_div">
 				<canvas width="854" height="480" id="mycanvas"></canvas>
 			</div>
+			<div id="canvas_other_div">
+				<canvas width="854" height="480" id="mymousecanvas"></canvas>
+			</div>
 			<div id="video_div">
 				<video width="854" height="480" id="myvideo"></video>
 			</div>
 			<div id="text_div">
-				<input type="text" name="text">
-				<input type="button" name="textbutton" value="Send" onClick="sendText()">
+				<input type="text" name="text" id="text">
 			</div>
 		</div>
 		<div id="instructions">
